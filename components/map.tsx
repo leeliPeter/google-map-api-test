@@ -77,6 +77,17 @@ export default function Map() {
 
           content.innerHTML = `
             <div class="p-0 max-w-[300px]">
+              <div class="flex justify-start absolute w-full top-2 left-2 mb-2">
+                <button
+                  onclick="console.log('Add to list:', '${place.place_id}')"
+                  class="px-3 py-1 bg-blue-500 text-white w-[80%] h-8  justify-center  text-sm rounded-lg hover:bg-blue-600 transition-colors duration-200 flex items-center gap-1"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  Add to List
+                </button>
+              </div>
               ${
                 photoUrl
                   ? `<div class="mb-4">
@@ -151,6 +162,9 @@ export default function Map() {
               lat: place.geometry.location.lat(),
               lng: place.geometry.location.lng(),
             },
+            pixelOffset: new google.maps.Size(0, -40),
+            disableAutoPan: false,
+            maxWidth: 300,
           });
 
           infoWindowRef.current = infoWindow;

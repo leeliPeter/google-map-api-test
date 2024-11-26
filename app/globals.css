@@ -27,7 +27,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -53,7 +53,7 @@
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
   }
 }
 @layer base {
@@ -63,4 +63,60 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.gm-style-iw-ch {
+  /* display: none !important; */
+  @apply h-0;
+}
+
+.gm-ui-hover-effect {
+  @apply relative h-[46px]  !important;
+}
+
+.gm-ui-hover-effect span {
+  @apply absolute -top-0 mt-0 pt-0 -right-3;
+}
+.gm-style-iw.gm-style-iw-c {
+  padding: 0 !important;
+  max-width: 300px !important;
+  @apply px-2 pb-2 !important;
+  max-height: none !important;
+  min-width: 0 !important;
+  border-radius: 8px !important;
+
+  box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.3);
+}
+
+/* Content container */
+.gm-style-iw-d {
+  overflow: hidden !important;
+  max-height: none !important;
+}
+
+/* Close button container */
+.gm-style-iw-t::after {
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0) 51%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+/* Close button */
+.gm-ui-hover-effect {
+  top: 0 !important;
+  right: 0 !important;
+  padding: 6px !important;
+  opacity: 0.8;
+}
+
+.gm-ui-hover-effect:hover {
+  opacity: 1;
+}
+
+/* Remove the default InfoWindow chrome */
+.gm-style-iw-tc {
+  display: none;
 }
