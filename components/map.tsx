@@ -182,6 +182,43 @@ export default function Map() {
     );
   };
 
+  const handleSearch = () => {
+    if (searchInputRef.current && searchInputRef.current.value.trim() !== "") {
+      const service = new google.maps.places.PlacesService(map!);
+      const searchQuery = searchInputRef.current.value;
+
+      const request = {
+        query: searchQuery,
+        fields: ["place_id", "geometry", "name"],
+      };
+
+      service.findPlaceFromQuery(request, (results, status) => {
+        if (
+          status === google.maps.places.PlacesServiceStatus.OK &&
+          results &&
+          results[0] &&
+          results[0].place_id
+        ) {
+          const firstResult = results[0];
+
+          if (firstResult.geometry?.location) {
+            // Center map on the first result
+            map?.setCenter(firstResult.geometry.location);
+            map?.setZoom(17);
+
+            // Show place details in InfoWindow
+            showPlaceDetails(firstResult.place_id!, map!);
+          }
+
+          // Clear the search input
+          if (searchInputRef.current) {
+            searchInputRef.current.value = "";
+          }
+        }
+      });
+    }
+  };
+
   // Initialize search box
   useEffect(() => {
     if (isLoaded && searchInputRef.current && map) {
@@ -222,35 +259,13 @@ export default function Map() {
     }
   };
 
-  const handleSearch = () => {
-    if (searchBoxRef.current && searchInputRef.current) {
-      const place = searchBoxRef.current.getPlace();
-      if (
-        place &&
-        place.geometry &&
-        place.geometry.location &&
-        place.place_id
-      ) {
-        // Center map on the selected place
-        map?.setCenter(place.geometry.location);
-        map?.setZoom(17);
-
-        // Show place details in InfoWindow
-        showPlaceDetails(place.place_id, map!);
-
-        // Clear the search input
-        searchInputRef.current.value = "";
-      }
-    }
-  };
-
   if (!isBrowser) return null;
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <div className="relative">
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 w-96 max-w-[90%]">
+      <div className="absolute top-4 left-4 z-10 w-80">
         <div className="flex gap-2">
           <input
             ref={searchInputRef}
@@ -291,9 +306,9 @@ export default function Map() {
         onLoad={handleMapLoad}
         options={{
           zoomControl: true,
-          streetViewControl: true,
-          mapTypeControl: true,
-          fullscreenControl: true,
+          streetViewControl: false,
+          mapTypeControl: false,
+          fullscreenControl: false,
           clickableIcons: true,
         }}
       />
