@@ -178,72 +178,15 @@ export default function Map() {
                 },
               });
 
-          infoWindowRef.current = infoWindow;
-          infoWindow.open(map);
-        }
-      }
-    );
-  };
+              // Store the reference to the new InfoWindow
+              infoWindowRef.current = infoWindow;
 
-  // Initialize search box
-  useEffect(() => {
-    if (isLoaded && searchInputRef.current && map) {
-      const autocomplete = new google.maps.places.Autocomplete(
-        searchInputRef.current
-      );
-      autocomplete.bindTo("bounds", map);
-
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-
-        if (!place.geometry || !place.geometry.location || !place.place_id) {
-          return;
-        }
-
-        // Center map on the selected place
-        map.setCenter(place.geometry.location);
-        map.setZoom(17);
-
-        // Show place details in InfoWindow
-        showPlaceDetails(place.place_id, map);
-
-        // Clear the search input
-        if (searchInputRef.current) {
-          searchInputRef.current.value = "";
-        }
+              // Open the InfoWindow
+              infoWindow.open(map);
+            }
+          }
+        );
       });
-
-      searchBoxRef.current = autocomplete;
-    }
-  }, [isLoaded, map]);
-
-  const handleMapLoad = (map: google.maps.Map) => {
-    setMap(map);
-
-    if (map) {
-      map.addListener("click", handleMapClick);
-    }
-  };
-
-  const handleSearch = () => {
-    if (searchBoxRef.current && searchInputRef.current) {
-      const place = searchBoxRef.current.getPlace();
-      if (
-        place &&
-        place.geometry &&
-        place.geometry.location &&
-        place.place_id
-      ) {
-        // Center map on the selected place
-        map?.setCenter(place.geometry.location);
-        map?.setZoom(17);
-
-        // Show place details in InfoWindow
-        showPlaceDetails(place.place_id, map!);
-
-        // Clear the search input
-        searchInputRef.current.value = "";
-      }
     }
   };
 
@@ -253,40 +196,6 @@ export default function Map() {
 
   return (
     <div className="relative">
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 w-96 max-w-[90%]">
-        <div className="flex gap-2">
-          <input
-            ref={searchInputRef}
-            type="text"
-            placeholder="Search places..."
-            className="w-full px-4 py-2 rounded-lg shadow-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSearch();
-              }
-            }}
-          />
-          <button
-            onClick={handleSearch}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-5 h-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
       <GoogleMap
         mapContainerStyle={containerStyle}
         zoom={14}
